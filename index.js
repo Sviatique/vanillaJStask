@@ -3,31 +3,37 @@ const AVATAR_WIDTH = 40
 window.onload = () => {
 	loadData("Sviatique").then((response) => {
 		let userId = 0;
-		const avatar = new Image()
-		const login = document.createElement('p')
-		const admin = document.createElement('p') 
-		const user = document.createElement('div')
 		const content = document.getElementById("content")
-		const elements = [avatar, login, admin]
+		let i = 0;
+		while(response){
+			const avatar = new Image()
+			const login = document.createElement('p')
+			const admin = document.createElement('p') 
+			const userWrapper = document.createElement('div')
+			const elements = [login, admin]
+			let user = response.shift();
 
-		user.id = 'user'+userId
-		userId++;
+			userWrapper.id = 'user'+userId
+			userId++;
 
-		content.appendChild(user)
+			content.appendChild(userWrapper)
+			userWrapper.appendChild(avatar)
 
-		avatar.src = response.avatar_url
-		avatar.height = AVATAR_HEIGHT
-		avatar.width = AVATAR_WIDTH
-		
-		login.innerHTML = response.login
+			avatar.src = user.avatar_url
+			avatar.height = AVATAR_HEIGHT
+			avatar.width = AVATAR_WIDTH
+			
+			login.innerHTML = user.login
+			admin.innerHTML = user.site_admin
 
-		admin.innerHTML = response.site_admin
-		console.log(elements)
-
-		while(elements){
-			elements[0].className = "col-md-1"
-			user.appendChild(elements.shift())
+			while(elements[0]){
+				elements[0].className = "col-md-1"
+				userWrapper.appendChild(elements.shift())
+			}
 		}
+		
+
+		
 		
 	})
 } 
@@ -35,10 +41,11 @@ window.onload = () => {
 const loadData = (userName) => {
 	return new Promise((resolve, reject) => {
 		const request = new XMLHttpRequest()
-		request.open("GET", "https://api.github.com/users/"+userName)
+		request.open("GET", "https://api.github.com/users")
 		request.responseType = "json"
 		request.onload = () => {
 		    	if(request.status == 200) {
+
 		    		resolve(request.response)
 		        } else {
 		        	reject(request.statusText)
