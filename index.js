@@ -58,8 +58,6 @@ window.onload = () => {
 				.catch(error => console.log(error));
 			}
 		
-			//const extraUserInfoWrapper = userPanel.nextElementSibling;
-
 			userPanel.classList.toggle('active');
 			extraUserInfoWrapper.classList.toggle('show');
 		}
@@ -102,9 +100,6 @@ window.onload = () => {
 
 			const name = document.createElement('p');
 			const email = document.createElement('p');
-
-			// name.innerHTML = 'userLogin';
-			// email.innerHTML = 'userEmail'; 
 
 			extraUserInfoWrapper.appendChild(name);
 			extraUserInfoWrapper.appendChild(email);
