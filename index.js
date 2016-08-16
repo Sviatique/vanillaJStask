@@ -1,7 +1,7 @@
 'use strict'
 
 window.onload = () => {
-	
+	let cachedUserData = {}
 	const loadData = () => {
 		return new Promise((resolve, reject) => {
 			const request = new XMLHttpRequest();
@@ -36,24 +36,29 @@ window.onload = () => {
 
 	const setupExtraUserData = (userLogin, userPanel, usersList) => {
 		userPanel.onclick = () => {
-			// loadConreteUserData(userLogin)
-			// .then(response => {
-			// 	const name = document.createElement('p');
-			// 	const email = document.createElement('p');
-			// 	const extraUserInfoWrapper = userPanel.nextElementSibling;
-
-			// 	name.innerHTML = user.name;
-			// 	email.innerHTML = user.email; 
-
-			// 	extraUserInfoWrapper.appendChild(name);
-			// 	extraUserInfoWrapper.appendChild(email);
-
-			// 	usersList.appendChild(extraUserInfoWrapper);
-			// })
-			//.catch(error => console.log(error));
 
 			const extraUserInfoWrapper = userPanel.nextElementSibling;
+			const name = extraUserInfoWrapper.children[0];
+			const email = extraUserInfoWrapper.children[1];
+			const concreteUserData = cachedUserData[userLogin];
 
+			if(concreteUserData){
+				name.innerHTML = concreteUserData.name;
+				email.innerHTML = concreteUserData.email; 
+			} else {
+				loadConreteUserData(userLogin)
+				.then(response => {
+
+					name.innerHTML = response.name;
+					email.innerHTML = response.email; 
+					cachedUserData[userLogin] = {};
+					cachedUserData[userLogin].name = response.name;
+					cachedUserData[userLogin].email = response.email;
+				})
+				.catch(error => console.log(error));
+			}
+		
+			//const extraUserInfoWrapper = userPanel.nextElementSibling;
 
 			userPanel.classList.toggle('active');
 			extraUserInfoWrapper.classList.toggle('show');
@@ -98,8 +103,8 @@ window.onload = () => {
 			const name = document.createElement('p');
 			const email = document.createElement('p');
 
-			name.innerHTML = 'userLogin';
-			email.innerHTML = 'userEmail'; 
+			// name.innerHTML = 'userLogin';
+			// email.innerHTML = 'userEmail'; 
 
 			extraUserInfoWrapper.appendChild(name);
 			extraUserInfoWrapper.appendChild(email);
@@ -108,7 +113,6 @@ window.onload = () => {
 
 			setupExtraUserData(user.login, userWrapper, allUsers);
 		}
-		
 			content.appendChild(allUsers);
 	})
 	.catch(error => console.log(error));
