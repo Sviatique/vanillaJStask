@@ -31,13 +31,22 @@ const contentBuilder = (() => {
         extraUserInfoWrapper.className = 'extraInfo';
 			
         const name = document.createElement('p');
-        name.id = 'userName';
-        
+        name.className = 'name';
+
         const email = document.createElement('p');
-        email.id = 'userEmail';
+        email.className = 'email';
+
+        const following = document.createElement('a');
+        following.className = 'following';
+
+        const followers = document.createElement('a');
+        followers.className = 'followers';
 
         extraUserInfoWrapper.appendChild(name);
         extraUserInfoWrapper.appendChild(email);
+        extraUserInfoWrapper.appendChild(following);
+        extraUserInfoWrapper.appendChild(followers);
+
         return extraUserInfoWrapper;
     }
 
@@ -45,13 +54,20 @@ const contentBuilder = (() => {
         userPanel.onclick = () => {
             const extraUserInfoWrapper = userPanel.querySelector('div.extraInfo');
             
-            const name = extraUserInfoWrapper.querySelector('p#userName');
-            const email = extraUserInfoWrapper.querySelector('p#userEmail');
+            const name = extraUserInfoWrapper.querySelector('p.name');
+            const email = extraUserInfoWrapper.querySelector('p.email');
+            const following = extraUserInfoWrapper.querySelector('a.following');
+            const followers = extraUserInfoWrapper.querySelector('a.followers');
 
             const extraData = loader.loadExtraData(userLogin)
             .then(data => {
+                console.log(data);
                 name.innerHTML = data.name;
                 email.innerHTML = data.email;
+                following.innerHTML = 'Following';
+                followers.innerHTML = 'Followers';
+                following.href = data.html_url + '/following';
+                followers.href = data.html_url + '/followers';
             })
             .catch(error => console.log(error));
              
@@ -83,7 +99,6 @@ const contentBuilder = (() => {
         const content = document.getElementById("content");
 	    const allUsers = document.createElement('ul');
 	    
-        allUsers.id = 'users';
 	    content.appendChild(allUsers);
     }
     return {
