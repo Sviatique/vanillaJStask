@@ -1,11 +1,11 @@
 const contentBuilder = (() => {
     
-    const getUserElement = (user) => {
+    const getGeneralUserInfoElement = (user) => {
         const avatar = document.createElement('img');
         const login = document.createElement('p');
         const admin = document.createElement('p');
 
-        const userWrapper = document.createElement('li');
+        const userWrapper = document.createElement('div');
 
         userWrapper.id = user.id;
         userWrapper.className = 'row';
@@ -41,9 +41,9 @@ const contentBuilder = (() => {
         return extraUserInfoWrapper;
     }
 
-    const setupExtraData = (userLogin, userPanel, usersList) => {
+    const setupExtraData = (userLogin, userPanel) => {
         userPanel.onclick = () => {
-            const extraUserInfoWrapper = userPanel.nextElementSibling;
+            const extraUserInfoWrapper = userPanel.querySelector('div.extraInfo');
             
             const name = extraUserInfoWrapper.querySelector('p#userName');
             const email = extraUserInfoWrapper.querySelector('p#userEmail');
@@ -62,22 +62,29 @@ const contentBuilder = (() => {
 	}
 
     const build = (data) => {
+        loader.loadGeneralData()
+        .then(data => {
+            while(data.length){
+                let user = data.shift();
+                const userElement = document.createElement('li');
+                
+                const generalUserInfoElement = getGeneralUserInfoElement(user); 
+                const extraUserInfoElement = getExtraUserInfoElement();
+
+                userElement.appendChild(generalUserInfoElement);
+                userElement.appendChild(extraUserInfoElement);
+                
+                setupExtraData(user.login, userElement);
+                allUsers.appendChild(userElement);
+            }
+        })
+        .catch(error => console.log(error));
+
         const content = document.getElementById("content");
 	    const allUsers = document.createElement('ul');
 	    
         allUsers.id = 'users';
-
-        while(data.length){
-			let user = data.shift();
-            const userElement = getUserElement(user);
-			allUsers.appendChild(userElement);
-
-			const extraUserInfoElement = getExtraUserInfoElement();
-			allUsers.appendChild(extraUserInfoElement);
-		
-			setupExtraData(user.login, userElement, allUsers);
-		}
-			content.appendChild(allUsers);
+	    content.appendChild(allUsers);
     }
     return {
         build: build
