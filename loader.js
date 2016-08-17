@@ -16,14 +16,13 @@ const loader = (() => {
 			});
 		};
 
-        const loadExtraData = userName => {
+        const _loadExtraData = userName => {
 			return new Promise((resolve, reject) => {
 					const request = new XMLHttpRequest();
 					request.open("GET", "https://api.github.com/users/"+userName);
 					request.responseType = "json";
 					request.onload = () => {
 						if(request.status == 200) {
-                            cachedUserData[userName] = resolve(request.response); //??? where to save data to cache
 							resolve(request.response);
 						} else {
 							reject(request.statusText);
@@ -33,13 +32,13 @@ const loader = (() => {
 			});
 		};
 
-		const _loadExtraData = userName => {
-            return cachedUserData[userName] || (cachedUserData[userName] = loadExtraData(userName));
+		const loadExtraData = userName => {
+            return cachedUserData[userName] || (cachedUserData[userName] = _loadExtraData(userName));
 		}
 
 		return {
 			loadGeneralData: loadGeneralData,
-			loadExtraData: _loadExtraData 	
+			loadExtraData: loadExtraData 	
 		}
 	})();
 
