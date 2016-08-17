@@ -1,69 +1,82 @@
 'use strict'
 
 window.onload = () => {
-	let cachedUserData = {}
-	const loadData = () => {
-		return new Promise((resolve, reject) => {
-			const request = new XMLHttpRequest();
-			request.open("GET", "https://api.github.com/users");
-			request.responseType = "json";
-			request.onload = () => {
-			    	if(request.status == 200) {
-			    		resolve(request.response);
-			        } else {
-			        	reject(request.statusText);
-			        }
-			};
-			request.send();
-		});
-	};
+	const loader = (() => {
+		let cachedUserData = {}
+		const loadGeneralData = () => {
+			return new Promise((resolve, reject) => {
+				const request = new XMLHttpRequest();
+				request.open("GET", "https://api.github.com/users");
+				request.responseType = "json";
+				request.onload = () => {
+						if(request.status == 200) {
+							resolve(request.response);
+						} else {
+							reject(request.statusText);
+						}
+				};
+				request.send();
+			});
+		};
 
-	const loadConreteUserData = (userName) => {
-		return new Promise((resolve, reject) => {
-			const request = new XMLHttpRequest();
-			request.open("GET", "https://api.github.com/users/"+userName);
-			request.responseType = "json";
-			request.onload = () => {
-			    	if(request.status == 200) {
-			    		resolve(request.response);
-			        } else {
-			        	reject(request.statusText);
-			        }
-			};
-			request.send();
-		});
-	}
+		const _loadExtraData = userName => {
+			
+			return cachedUserData[userName];
+		}
 
-	const setupExtraUserData = (userLogin, userPanel, usersList) => {
+		const loadExtraData = userName => {
+			return new Promise((resolve, reject) => {
+				console.log(_loadExtraData(userName));
+				if(_loadExtraData(userName) == null){
+					console.log("Not cached data");
+					const request = new XMLHttpRequest();
+					request.open("GET", "https://api.github.com/users/"+userName);
+					request.responseType = "json";
+					request.onload = () => {
+						if(request.status == 200) {
+							cachedUserData[userName] = request.response;
+							resolve(request.response);
+						} else {
+							reject(request.statusText);
+						}
+					};
+					request.send(); 
+				} 
+				else{
+					console.log("Cached data");
+					resolve(cachedUserData[userName]);	
+				}
+			});
+		};
+
+		return {
+			loadGeneralData: loadGeneralData,
+			loadExtraData: loadExtraData 	
+		}
+	})();
+	
+	const setupExtraData = (userLogin, userPanel, usersList) => {
 		userPanel.onclick = () => {
-
 			const extraUserInfoWrapper = userPanel.nextElementSibling;
+			
 			const name = extraUserInfoWrapper.children[0];
 			const email = extraUserInfoWrapper.children[1];
-			const concreteUserData = cachedUserData[userLogin];
-
-			if(concreteUserData){
-				name.innerHTML = concreteUserData.name;
-				email.innerHTML = concreteUserData.email; 
-			} else {
-				loadConreteUserData(userLogin)
+		
+				loader.loadExtraData(userLogin)
 				.then(response => {
-
+					console.log(response)
 					name.innerHTML = response.name;
 					email.innerHTML = response.email; 
-					cachedUserData[userLogin] = {};
-					cachedUserData[userLogin].name = response.name;
-					cachedUserData[userLogin].email = response.email;
 				})
 				.catch(error => console.log(error));
+
+				userPanel.classList.toggle('active');
+				extraUserInfoWrapper.classList.toggle('show');
 			}
-		
-			userPanel.classList.toggle('active');
-			extraUserInfoWrapper.classList.toggle('show');
 		}
-	}
 	
-	loadData()
+	
+	loader.loadGeneralData()
 	.then(response => {
 		const content = document.getElementById("content");
 		const allUsers = document.createElement('ul');
@@ -97,7 +110,7 @@ window.onload = () => {
 
 			const extraUserInfoWrapper = document.createElement('div');
 			extraUserInfoWrapper.className = 'extraInfo';
-
+			
 			const name = document.createElement('p');
 			const email = document.createElement('p');
 
@@ -105,8 +118,9 @@ window.onload = () => {
 			extraUserInfoWrapper.appendChild(email);
 
 			allUsers.appendChild(extraUserInfoWrapper);
-
-			setupExtraUserData(user.login, userWrapper, allUsers);
+		
+			setupExtraData(user.login, userWrapper, allUsers);
+			
 		}
 			content.appendChild(allUsers);
 	})
