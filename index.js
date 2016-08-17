@@ -28,7 +28,6 @@ window.onload = () => {
 			return new Promise((resolve, reject) => {
 				console.log(_loadExtraData(userName));
 				if(_loadExtraData(userName) == null){
-					console.log("Not cached data");
 					const request = new XMLHttpRequest();
 					request.open("GET", "https://api.github.com/users/"+userName);
 					request.responseType = "json";
@@ -43,7 +42,6 @@ window.onload = () => {
 					request.send(); 
 				} 
 				else{
-					console.log("Cached data");
 					resolve(cachedUserData[userName]);	
 				}
 			});
@@ -59,12 +57,11 @@ window.onload = () => {
 		userPanel.onclick = () => {
 			const extraUserInfoWrapper = userPanel.nextElementSibling;
 			
-			const name = extraUserInfoWrapper.children[0];
-			const email = extraUserInfoWrapper.children[1];
+			const name = extraUserInfoWrapper.querySelector('p#userName');
+			const email = extraUserInfoWrapper.querySelector('p#userEmail');
 		
 				loader.loadExtraData(userLogin)
 				.then(response => {
-					console.log(response)
 					name.innerHTML = response.name;
 					email.innerHTML = response.email; 
 				})
@@ -112,7 +109,10 @@ window.onload = () => {
 			extraUserInfoWrapper.className = 'extraInfo';
 			
 			const name = document.createElement('p');
+			name.id = 'userName';
+			
 			const email = document.createElement('p');
+			email.id = 'userEmail';
 
 			extraUserInfoWrapper.appendChild(name);
 			extraUserInfoWrapper.appendChild(email);
