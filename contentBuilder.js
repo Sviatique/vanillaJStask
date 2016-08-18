@@ -123,6 +123,7 @@ const contentBuilder = (() => {
                 console.log(data);
                 const userOrgs = extraUserInfoWrapper.querySelector('div.orgs') || document.createElement('div');
                 userOrgs.className = 'orgs';
+                userOrgs.innerHTML = '<div>'+userLogin+'\'s organizations: </div>';
                 organizations.onclick = event => {
                     loader.loadExtraData(userLogin+'/orgs') 
                     .then((orgs) => {
