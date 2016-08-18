@@ -1,12 +1,11 @@
 const loader = (() => {
 		let cachedUserData = {}
-
+		
         const loadData = userName => {
             return new Promise((resolve, reject) => {
 					const request = new XMLHttpRequest();
 					
                     let link = 'https://api.github.com/users' +  (userName ? '/' + userName : '');
-					console.log(link)
 					request.open('GET', link);
 					request.responseType = 'json';
 					request.onload = () => {

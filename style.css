@@ -11,7 +11,7 @@ ul > li.active, ul > li:hover {
 	background: rgb(255, 238, 230);
 }
 
-div.extraInfo {
+div.extraInfo, div.organizations, div.orgs {
 	max-height: 0px;
 
     overflow: hidden;
@@ -21,8 +21,8 @@ div.extraInfo {
     background-color: rgb(255, 238, 230);
 }
 
-div.extraInfo.show {
-
+div.extraInfo.show, div.orgs.show {
+	
     opacity: 1;
     max-height: 500px;
 }
@@ -31,10 +31,6 @@ img {
 	max-width: 100px;
 	max-height: 100px;
 }
-
-a.following {
-	background-image: url('person.svg') ;
-	background-repeat: no-repeat;
-	height: 24px;
-	width: 24px;
+a{
+	margin-right: 10px;
 }
