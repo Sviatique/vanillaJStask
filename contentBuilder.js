@@ -63,7 +63,7 @@ const contentBuilder = (() => {
         const repos = document.createElement('a');
         repos.className = 'repos';
         
-        setLinkProps([following, followers, starred, subscriptions, repos]);
+        setLinkProps([following, followers, starred, repos]);
 
         const followingImage = document.createElement('img');
         const followersImage = document.createElement('img');
@@ -116,7 +116,10 @@ const contentBuilder = (() => {
             subscriptionsImage.src = 'icons/tasklist.svg';
             organizationsImage.src = 'icons/organization.svg';
             reposImage.src = 'icons/repo.svg';
-
+            subscriptions.onclick = event => {
+                window.open('subscriptions.html?'+userLogin, '_blind');
+                event.stopPropagation();
+            };
             const extraData = loader.loadExtraData(userLogin)
             .then(data => {
                 const url = data.html_url;
@@ -148,8 +151,6 @@ const contentBuilder = (() => {
                 following.href = url + '/following';
                 followers.href = url + '/followers';
                 starred.href = 'https://github.com/stars/'+data.login;
-                subscriptions.href = url + '/subscriptions';
-                //organizations.href = url + '/organizations';
                 repos.href = url + '?tab=repositories';
             })
             .catch(error => console.log(error));
