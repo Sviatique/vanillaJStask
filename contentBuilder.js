@@ -16,9 +16,9 @@ const contentBuilder = (() => {
         login.innerHTML = user.login;
         login.className = 'col-xs-4';
         
-        admin.innerHTML = user.site_admin;
         admin.className = 'col-xs-4';
-        
+        admin.classList.toggle(user.site_admin);
+
         userWrapper.appendChild(avatar);
         userWrapper.appendChild(login);
         userWrapper.appendChild(admin);
@@ -80,13 +80,17 @@ const contentBuilder = (() => {
         repos.appendChild(reposImage);
         extraUserInfoWrapper.appendChild(name);
         extraUserInfoWrapper.appendChild(email);
-        extraUserInfoWrapper.appendChild(following);
-        extraUserInfoWrapper.appendChild(followers);
-        extraUserInfoWrapper.appendChild(starred);
-        extraUserInfoWrapper.appendChild(subscriptions);
-        extraUserInfoWrapper.appendChild(organizations);
-        extraUserInfoWrapper.appendChild(repos);
 
+        const linksWrapper = document.createElement('div');
+
+        linksWrapper.appendChild(following);
+        linksWrapper.appendChild(followers);
+        linksWrapper.appendChild(starred);
+        linksWrapper.appendChild(subscriptions);
+        linksWrapper.appendChild(organizations);
+        linksWrapper.appendChild(repos);
+
+        extraUserInfoWrapper.appendChild(linksWrapper);
         return extraUserInfoWrapper;
     }
 
@@ -125,11 +129,12 @@ const contentBuilder = (() => {
                 const url = data.html_url;
                 const userOrgs = extraUserInfoWrapper.querySelector('div.orgs') || document.createElement('div');
                 userOrgs.className = 'orgs';
-                userOrgs.innerHTML = '<div>'+userLogin+'\'s organizations: </div>';
+
                 organizations.onclick = event => {
                     loader.loadExtraData(userLogin+'/orgs') 
                     .then((orgs) => {
                         while(orgs.length){
+                            
                             const org = orgs.shift();
                             const orgElement = document.createElement('a');
                             setLinkProps([orgElement]);
