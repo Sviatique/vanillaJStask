@@ -34,3 +34,7 @@ img {
 a{
 	margin-right: 10px;
 }
+a > img {
+	min-width: 20px;
+	min-height: 20px;
+}
