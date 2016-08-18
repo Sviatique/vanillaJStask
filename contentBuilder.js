@@ -123,17 +123,14 @@ const contentBuilder = (() => {
             const extraData = loader.loadExtraData(userLogin)
             .then(data => {
                 const url = data.html_url;
-                console.log(data);
                 const userOrgs = extraUserInfoWrapper.querySelector('div.orgs') || document.createElement('div');
                 userOrgs.className = 'orgs';
                 userOrgs.innerHTML = '<div>'+userLogin+'\'s organizations: </div>';
                 organizations.onclick = event => {
                     loader.loadExtraData(userLogin+'/orgs') 
                     .then((orgs) => {
-                        console.log(orgs);
                         while(orgs.length){
                             const org = orgs.shift();
-                            console.log(org)
                             const orgElement = document.createElement('a');
                             setLinkProps([orgElement]);
                             orgElement.text = org.login;
