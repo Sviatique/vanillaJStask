@@ -3,7 +3,7 @@ const loader = (() => {
 
         const loadData = userName => {
             return new Promise((resolve, reject) => {
-                    let link = 'https://api.github.com/users' +  (userName ? '/' + userName : '');
+                    let link = `https://api.github.com/users${userName ? '/' + userName : ''}`;
 					$.get(link, '', data => {resolve(data);},'json');
 			});
         };

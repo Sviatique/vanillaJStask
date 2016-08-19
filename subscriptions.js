@@ -3,7 +3,7 @@ window.onload = () => {
     const userLogin = window.location.search.slice(1);
     const content = $('#subscribers');
     content.text(`Subscriptions of user ${userLogin}`);
-    loader.loadExtraData(userLogin+'/subscriptions')
+    loader.loadExtraData(`${userLogin}/subscriptions`)
     .then(data => {
         const allSubscribers = $('<ul></ul>');
 

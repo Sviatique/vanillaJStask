@@ -11,9 +11,7 @@ const template = (() => {
     };
 
      const setLinkProps = links => {
-        links = links.splice(0, links.length-1)
         links.map(link => {
-            
             link.click(event => {
                 event.stopPropagation();
             });
