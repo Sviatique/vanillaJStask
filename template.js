@@ -1,4 +1,4 @@
-const template = (() => {
+define(['./loader'],(loader) => {
     const generalDataTemplate = data => {
         const userElement = $(`<li class = ${data.login}>\
         <div class="row">\
@@ -95,4 +95,4 @@ const template = (() => {
         getComplexDataTemplate: getComplexDataTemplate,
         fillWithExtraData: fillWithExtraData
     };
-})();
+});

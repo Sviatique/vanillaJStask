@@ -1,14 +1,12 @@
 'use strict'
 
-const contentBuilder = (() => {
+define(['./template', './loader'], (template,loader) => {
     const setupExtraData = (userLogin, userPanel) => {
         userPanel.click(() => {
             if(loader.checkForCaching(userLogin)){
                 const extraData = loader.loadExtraData(userLogin)
                 .then(data => {
-                    require(['template'], () => {
                         template.fillWithExtraData(data);
-                    })
                     
                 })
                 .catch(error => console.log(error));
@@ -24,11 +22,9 @@ const contentBuilder = (() => {
         loader.loadGeneralData()
         .then(data => {
             data.map(user => { 
-                require(['template'], () => {
                         const userElement = template.getComplexDataTemplate(user);
                         setupExtraData(user.login, userElement);
                         allUsers.append(userElement);
-                    })
                 
             });
         })
@@ -38,4 +34,6 @@ const contentBuilder = (() => {
     return {
         build: build
     };
-})();
+}
+
+);

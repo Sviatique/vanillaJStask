@@ -1,5 +1,30 @@
-const loader = (() => {
-		let cachedUserData = {};
+// const loader = (() => {
+// 		let cachedUserData = {};
+
+//         const loadData = userName => {
+//             return new Promise((resolve, reject) => {
+//                     let link = `https://api.github.com/users${userName ? '/' + userName : ''}`;
+// 					$.get(link, '', data => {resolve(data);},'json');
+// 			});
+//         };
+
+// 		const loadExtraData = userName => {
+//             return cachedUserData[userName] || (cachedUserData[userName] = loadData(userName));
+// 		};
+
+// 		const checkForCaching = userName => {
+// 			return Boolean(!cachedUserData[userName]);
+// 		};
+		
+// 		return {
+// 			loadGeneralData: loadData,
+// 			loadExtraData: loadExtraData,
+// 			checkForCaching: checkForCaching	
+// 		};
+// 	})();
+
+define(() => {
+			let cachedUserData = {};
 
         const loadData = userName => {
             return new Promise((resolve, reject) => {
@@ -16,10 +41,9 @@ const loader = (() => {
 			return Boolean(!cachedUserData[userName]);
 		};
 		
-		return {
-			loadGeneralData: loadData,
-			loadExtraData: loadExtraData,
-			checkForCaching: checkForCaching	
-		};
-	})();
-
+    return {
+        loadGeneralData: loadData,
+		loadExtraData: loadExtraData,
+		checkForCaching: checkForCaching
+    }
+});

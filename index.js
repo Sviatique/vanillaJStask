@@ -1,8 +1,6 @@
 'use strict'
 
-require(['loader','contentBuilder'], () =>{
-	console.log(loader);
-		console.log(loader)
+define(['./loader','./contentBuilder'], (loader, contentBuilder) =>{
 		loader.loadGeneralData()
 		.then(response => {
 			contentBuilder.build(response);

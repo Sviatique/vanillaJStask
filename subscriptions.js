@@ -1,5 +1,5 @@
 'use strict'
-window.onload = () => {
+define(['./loader'],(loader) => {
     const userLogin = window.location.search.slice(1);
     const content = $('#subscribers');
     content.text(`Subscriptions of user ${userLogin}`);
@@ -17,4 +17,4 @@ window.onload = () => {
     })
     .catch(error => console.log(error));
 
-};
+});
