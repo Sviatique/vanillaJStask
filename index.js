@@ -1,9 +1,11 @@
 'use strict'
 
-window.onload = () => {
-	loader.loadGeneralData()
-	.then(response => {
-		contentBuilder.build(response);
-	})
-	.catch(error => console.log(error));
-};
+require(['loader','contentBuilder'], () =>{
+	console.log(loader);
+		console.log(loader)
+		loader.loadGeneralData()
+		.then(response => {
+			contentBuilder.build(response);
+		})
+		.catch(error => console.log(error));
+});

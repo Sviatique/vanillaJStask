@@ -4,10 +4,8 @@
   "globals": {
     "document": true,
     "console": true,
-    "loader": true,
     "window": true,
-    "contentBuilder": true,
-    "template": true,
+    "require": true,
     "$": true
   }
 }

@@ -1,18 +1,21 @@
 'use strict'
+
 const contentBuilder = (() => {
     const setupExtraData = (userLogin, userPanel) => {
         userPanel.click(() => {
             if(loader.checkForCaching(userLogin)){
                 const extraData = loader.loadExtraData(userLogin)
                 .then(data => {
-                    template.fillWithExtraData(data);
+                    require(['template'], () => {
+                        template.fillWithExtraData(data);
+                    })
+                    
                 })
                 .catch(error => console.log(error));
             }
             userPanel.toggleClass('active');
             userPanel.find($(`li.${userLogin} > div.extraInfo`)).toggleClass('show');
         });
-        
 	};
 
     const build = (data) => {
@@ -21,9 +24,12 @@ const contentBuilder = (() => {
         loader.loadGeneralData()
         .then(data => {
             data.map(user => { 
-                const userElement = template.getComplexDataTemplate(user);
-                setupExtraData(user.login, userElement);
-                allUsers.append(userElement);
+                require(['template'], () => {
+                        const userElement = template.getComplexDataTemplate(user);
+                        setupExtraData(user.login, userElement);
+                        allUsers.append(userElement);
+                    })
+                
             });
         })
         .catch(error => console.log(error));

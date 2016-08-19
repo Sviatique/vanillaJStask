@@ -33,8 +33,6 @@ const template = (() => {
         </div>\
         </div>`);
 
-        
-
         return extraUserInfoElement;
     };
     
@@ -51,7 +49,7 @@ const template = (() => {
             const extraUserInfoWrapper = $(`li.${data.login} > div.extraInfo`);
             const name = extraUserInfoWrapper.find('p.name');
             const email = extraUserInfoWrapper.find('p.email');
-
+            
             const following = extraUserInfoWrapper.find('a.following');
             const followers = extraUserInfoWrapper.find('a.followers');
             const starred = extraUserInfoWrapper.find('a.starred');
@@ -60,7 +58,9 @@ const template = (() => {
             const repos = extraUserInfoWrapper.find('a.repos');
 
             const url = data.html_url;
+
             setLinkProps([following, followers, starred, repos]);
+
             const userOrgs = $('<div class="orgs"></div>');
             subscriptions.click(event => {
                     window.open(`subscriptions.html?${data.login}`,'_blind');
@@ -85,10 +85,10 @@ const template = (() => {
             name.text(data.name);
             email.text(data.email);
 
-            following.attr('href', url + '/following');
-            followers.attr('href',url + '/followers');
+            following.attr('href', `${url}/following`);
+            followers.attr('href',`${url}/followers`);
             starred.attr('href',`https://github.com/stars/${data.login}`);
-            repos.attr('href', url + '?tab=repositories');
+            repos.attr('href', `${url}?tab=repositories`);
     };
 
     return {
