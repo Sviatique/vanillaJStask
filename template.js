@@ -1,8 +1,5 @@
 const template = (() => {
     const generalDataTemplate = data => {
-        const avatar = document.createElement('img');
-        const login = document.createElement('p');
-        const admin = document.createElement('p');
         const userElement = $(`<li class = ${data.login}>\
         <div class="row">\
         <img class="col-xs-4" src="${data.avatar_url}"></img>\
@@ -12,12 +9,15 @@ const template = (() => {
         </li>`);
         return userElement;
     };
+
      const setLinkProps = links => {
+        links = links.splice(0, links.length-1)
         links.map(link => {
-            link.onclick = (event) => {
+            
+            link.click(event => {
                 event.stopPropagation();
-            };
-            link.target="_blank";
+            });
+            link.attr('target','_blank');
         });            
     };
 
@@ -35,7 +35,7 @@ const template = (() => {
         </div>\
         </div>`);
 
-        //setLinkProps(extraUserInfoElement.find('a'));
+        
 
         return extraUserInfoElement;
     };
@@ -61,52 +61,40 @@ const template = (() => {
             const organizations = extraUserInfoWrapper.find('a.organizations');
             const repos = extraUserInfoWrapper.find('a.repos');
 
-            const followingImage = following.find('img');
-            const followersImage = followers.find('img');
-            const starredImage = starred.find('img');
-            const subscriptionsImage = subscriptions.find('img');
-            const organizationsImage = organizations.find('img');
-            const reposImage = repos.find('img');
-
             const url = data.html_url;
-            
-            const userOrgs = extraUserInfoWrapper.find('div.orgs') || $('<div class="orgs"></div>');
-
-                subscriptions.bind('click', event => {
-                        window.open('subscriptions.html?'+userLogin, '_blind');
-                        event.stopPropagation();
-                    }
-                );
-
-                organizations.bind('click', event => {
-                    loader.loadExtraData(userLogin+'/orgs') 
-                    .then((orgs) => {
+            setLinkProps([following, followers, starred, repos]);
+            const userOrgs = $('<div class="orgs"></div>');
+            subscriptions.click(event => {
+                    window.open(`subscriptions.html?${data.login}`,'_blind');
+                    event.stopPropagation();
+                }
+            );
+            organizations.click(event => {
+                if(loader.checkForCaching(data.login+'/orgs')){
+                    loader.loadExtraData(data.login+'/orgs') 
+                    .then(orgs => {
                         orgs.map(org => {
                             const orgElement = $(`<a href="https://github.com/${org.login}">${org.login}</a>`);
-                            //setLinkProps([orgElement]);
-                            // orgElement.text = org.login;
-                            // orgElement.href = 'https://github.com/'+org.login;
                             userOrgs.append(orgElement);
                         });
                     });
-                    userOrgs.toggleClass('show');
-                    extraUserInfoWrapper.append(userOrgs);
+                }
+                userOrgs.toggleClass('show');
+                extraUserInfoWrapper.append(userOrgs);
+                event.stopPropagation();
+            });
+                
+            name.text(data.name);
+            email.text(data.email);
 
-                    event.stopPropagation();
-                });
-
-                name.text(data.name);
-                email.text(data.email);
-
-                following.href = url + '/following';
-                followers.href = url + '/followers';
-                starred.href = `https://github.com/stars/${data.login}`;
-                repos.href = url + '?tab=repositories';
+            following.attr('href', url + '/following');
+            followers.attr('href',url + '/followers');
+            starred.attr('href',`https://github.com/stars/${data.login}`);
+            repos.attr('href', url + '?tab=repositories');
     };
 
     return {
         getComplexDataTemplate: getComplexDataTemplate,
-        getExtraDataTemplate: extraDataTemplate,
         fillWithExtraData: fillWithExtraData
     };
 })();

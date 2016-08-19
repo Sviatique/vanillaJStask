@@ -1,22 +1,19 @@
-"use strict"
+'use strict'
 window.onload = () => {
-
     const userLogin = window.location.search.slice(1);
-    const content = document.getElementById('subscribers');
-    content.innerHTML = '<div> Subscriptions of user '+userLogin+' </div>';
+    const content = $('#subscribers');
+    content.text(`Subscriptions of user ${userLogin}`);
     loader.loadExtraData(userLogin+'/subscriptions')
     .then(data => {
-        const allSubscribers = document.createElement('ul');
+        const allSubscribers = $('<ul></ul>');
 
-        while(data.length){
-            const subscriber = data.shift();
-            const subscriberElement = document.createElement('li');
+        data.map(subscriber => {
+            const subscriberElement = $('<li></li>');
 
-            subscriberElement.innerHTML = subscriber.name;
-            allSubscribers.appendChild(subscriberElement);
-
-        }
-        content.appendChild(allSubscribers);
+            subscriberElement.text(subscriber.name);
+            allSubscribers.append(subscriberElement);
+        });
+        content.append(allSubscribers);
     })
     .catch(error => console.log(error));
 

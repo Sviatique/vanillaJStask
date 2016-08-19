@@ -12,9 +12,14 @@ const loader = (() => {
             return cachedUserData[userName] || (cachedUserData[userName] = loadData(userName));
 		};
 
+		const checkForCaching = userName => {
+			return Boolean(!cachedUserData[userName]);
+		};
+		
 		return {
 			loadGeneralData: loadData,
-			loadExtraData: loadExtraData 	
+			loadExtraData: loadExtraData,
+			checkForCaching: checkForCaching	
 		};
 	})();
 
