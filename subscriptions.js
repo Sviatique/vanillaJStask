@@ -1,3 +1,4 @@
+"use strict"
 window.onload = () => {
 
     const userLogin = window.location.search.slice(1);
@@ -19,4 +20,4 @@ window.onload = () => {
     })
     .catch(error => console.log(error));
 
-}
+};

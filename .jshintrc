@@ -1,0 +1,13 @@
+{
+  "esversion": 6,
+  "strict": false,
+  "globals": {
+    "document": true,
+    "console": true,
+    "loader": true,
+    "window": true,
+    "contentBuilder": true,
+    "template": true,
+    "$": true
+  }
+}
